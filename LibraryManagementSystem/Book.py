@@ -1,7 +1,7 @@
 import uuid
 from enum import Enum
 from LibraryManagementSystem.Member import Member
-import datetime
+from datetime import datetime
 
 
 class BookCategory(Enum):
@@ -18,11 +18,12 @@ class Book:
         self.name = name
         self.author = author
         self.category = category
+
         # Private attributes
         self._num = num
         self._numAvailable = num
         self._borrowedBy: list[Member] = []
-        self._reservedBy: list[tuple[Member, datetime.datetime]] = []
+        self._reservedBy: list[tuple[Member, datetime]] = []
 
     def borrowBook(self, borrowBy: Member):
         if self._numAvailable > 0:
@@ -32,8 +33,8 @@ class Book:
         return False
 
     def reserveBook(self, reserveBy: Member):
-        date = datetime.datetime.now()
-        print(date)
+        date = datetime.now()
+        # print(date)
         self._reservedBy.append((reserveBy, date))
 
     def returnBook(self, returnedBy: Member):
