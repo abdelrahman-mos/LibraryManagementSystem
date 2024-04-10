@@ -13,7 +13,7 @@ class Library:
 
     def add_book(self, bookName: str, author: str, category: BookCategory, num: int = 1):
         book: Book = Book(name=bookName, author=author, category=category, num=num)
-        print(book)
+        # print(book)
         self.books.append(book)
 
     @staticmethod
@@ -23,3 +23,4 @@ class Library:
         mem: Member = Member('Ahmed')
         mem2: Member = Member('Mohamed')
         mem.borrowBook(lib.books[0])
+        mem2.borrowBook(lib.books[0])

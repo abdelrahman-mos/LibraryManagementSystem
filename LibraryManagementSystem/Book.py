@@ -6,6 +6,7 @@ from datetime import datetime
 if TYPE_CHECKING:
     from LibraryManagementSystem.Member import Member
 
+
 class BookCategory(Enum):
     SCIENCE = 1
     FICTION = 2
@@ -38,6 +39,7 @@ class Book:
         date = datetime.now()
         # print(date)
         self._reservedBy.append((reserveBy, date))
+        return date
 
     def returnBook(self, returnedBy: "Member"):
         if returnedBy in self._borrowedBy:
