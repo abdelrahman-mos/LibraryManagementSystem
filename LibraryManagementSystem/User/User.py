@@ -14,7 +14,7 @@ class User:
         self.name = name
         self.id = uuid.uuid4()
 
-    def Login(self):
+    def onLogin(self):
         pass
 
     def borrowBook(self, book: "Book"):
