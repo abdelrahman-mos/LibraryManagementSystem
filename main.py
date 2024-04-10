@@ -1,4 +1,5 @@
-from LibraryManagementSystem.Library import Library
+from LibraryManagementSystem.LibrarySystem import LibrarySystem
 
 if __name__ == "__main__":
-    Library.run()
+    LibrarySys = LibrarySystem()
+    LibrarySys.run()

@@ -1,18 +1,17 @@
-import uuid
 from datetime import datetime
 from typing import List, Tuple, TYPE_CHECKING
 from LibraryManagementSystem.User.User import User
 
 if TYPE_CHECKING:
-    from LibraryManagementSystem.Book import Book
+    from LibraryManagementSystem.Library.Book import Book
 
 
 class Member(User):
 
     _MAX_BORROW = 5
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def __init__(self, name: str, userName: str, passwd: bytes):
+        super().__init__(name, userName, passwd)
         self.borrowedBooks: List[Tuple["Book", datetime]] = []
         self.reservedBooks: List["Book"] = []
         self._canBorrow = True
@@ -35,5 +34,5 @@ class Member(User):
 
     def reserveBook(self, book: "Book"):
         date = book.reserveBook(self)
-        print(f"Book reserved on date {date.strftime("%d/%m/%Y, %H:%M:%S")}")
+        # print(f"Book reserved on date {date.strftime("%d/%m/%Y, %H:%M:%S")}")
         self.reservedBooks.append(book)

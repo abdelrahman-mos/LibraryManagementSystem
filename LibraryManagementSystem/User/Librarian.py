@@ -1,16 +1,15 @@
-import uuid
 from datetime import datetime
 from typing import List, Tuple, TYPE_CHECKING
 from LibraryManagementSystem.User.User import User
 
 if TYPE_CHECKING:
-    from LibraryManagementSystem.Book import Book
+    from LibraryManagementSystem.Library.Book import Book
 
 
 class Librarian(User):
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def __init__(self, name: str, userName: str, passwd: bytes):
+        super().__init__(name, userName, passwd)
         self.borrowedBooks: List[Tuple["Book", datetime]] = []
         self.reservedBooks: List["Book"] = []
         self._canBorrow = True

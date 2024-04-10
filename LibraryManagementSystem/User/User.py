@@ -1,18 +1,19 @@
 import uuid
-from datetime import datetime
-from typing import List, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from LibraryManagementSystem.Book import Book
+    from LibraryManagementSystem.Library.Book import Book
 
 
 class User:
 
     # _MAX_BORROW = 5
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, userName: str, passwd: bytes):
         self.name = name
         self.id = uuid.uuid4()
+        self.userName = userName
+        self._passwd = passwd
 
     def onLogin(self):
         pass
