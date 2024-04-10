@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from LibraryManagementSystem.Book import Book, BookCategory
 from LibraryManagementSystem.User.Member import Member
-from typing import List
+from typing import List, Union, Callable
 from enum import Enum
 
 
@@ -10,13 +10,15 @@ def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+class SearchMode(Enum):
+    # search mode to get rid of code redundancy.
+    TITLE = 1
+    AUTHOR = 2
+    CATEGORY = 3
+    PUBLICATION_DATE = 4
+
+
 class Library:
-    class SearchMode(Enum):
-        # search mode to get rid of code redundancy. Might need to be general for main search function.
-        TITLE = 1
-        AUTHOR = 2
-        CATEGORY = 3
-        PUBLICATION_DATE = 4
 
     def __init__(self):
         self.books: List[Book] = []
@@ -35,12 +37,33 @@ class Library:
     #     out = startWith + [book for book in includes if book not in startWith]
     #     return out
 
-    def search(self, bookName: str, mode: SearchMode = SearchMode.TITLE) -> List[Book]:
-        books = [book for book in self.books if bookName in book.title]
-        booksStartWith = [book for book in books if book.title.startswith(bookName)]
-        out = (sorted(booksStartWith, key=lambda x: x.name) +
-               sorted([book for book in books if book not in booksStartWith],
-                      key=lambda x: x.name))
+    def search(self, searchText: Union[str, BookCategory, datetime], mode: SearchMode = SearchMode.TITLE) -> List[Book]:
+        # change search key depending on search mode
+        if mode == SearchMode.TITLE:
+            searchKey: Callable[[Book], str] = lambda x: x.title
+        elif mode == SearchMode.AUTHOR:
+            searchKey: Callable[[Book], str] = lambda x: x.author
+        elif mode == SearchMode.CATEGORY:
+            searchKey: Callable[[Book], BookCategory] = lambda x: x.category
+        elif mode == SearchMode.PUBLICATION_DATE:
+            searchKey: Callable[[Book], datetime] = lambda x: x.publicationDate
+        else:
+            print("search mode is not possible")
+            raise ValueError
+
+        # for a text input
+        if mode == SearchMode.TITLE or mode == SearchMode.AUTHOR:
+            books = [book for book in self.books if searchText in searchKey(book)]
+
+        # for a non-text input (date or category
+        else:
+            books = [book for book in self.books if searchText == searchKey(book)]
+        # booksStartWith = [book for book in books if book.title.startswith(searchText)]
+        # out = (sorted(booksStartWith, key=lambda x: x.title) +
+        #        sorted([book for book in books if book not in booksStartWith],
+        #               key=lambda x: x.title))
+
+        out = sorted(books, key=lambda x: x.title)
 
         return out
 
@@ -69,5 +92,12 @@ class Library:
         mem2: Member = Member('Mohamed')
         mem.borrowBook(lib.books[0])
         mem2.borrowBook(lib.books[0])
-        lib.search('Ka')
-        lib.search('Kafk')
+        x = lib.search('Ka')
+        xnames = [book.title for book in x]
+        print(xnames)
+        # date1 = datetime.strptime("2018/7/25", "%Y/%m/%d")
+        # date2 = datetime.strptime("2018/7/25", "%Y/%m/%d")
+        # print(date1 == date2)
+        x = lib.search(BookCategory.FICTION, mode=SearchMode.CATEGORY)
+        xnames = [book.title for book in x]
+        print(xnames)
