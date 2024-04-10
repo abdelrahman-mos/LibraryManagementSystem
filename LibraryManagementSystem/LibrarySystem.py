@@ -1,4 +1,5 @@
 import bcrypt
+import os
 from LibraryManagementSystem.Library.Library import Library, SearchMode
 from LibraryManagementSystem.User.Member import Member
 from LibraryManagementSystem.Library.Book import BookCategory
@@ -10,13 +11,17 @@ if TYPE_CHECKING:
     from LibraryManagementSystem.User.Librarian import Librarian
 
 
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 class LibrarySystem:
     # This acts as the system
 
     def _Login(self, dB: LibdB):
         usrName = input("Username: ")
         passwd = str.encode(input("password: "))
-        dB.checkCredentials(usrName, passwd)
+        return dB.checkCredentials(usrName, passwd)
         # passwd = getpass("Password: ")
 
     def _hashPass(self, passwd: bytes):
@@ -25,7 +30,11 @@ class LibrarySystem:
 
     def run(self):
         dB = LibdB()
-        self._Login(dB)
+        while True:
+            while not self._Login(dB):
+                pass
+            if input("x to exit: ") == 'x':
+                break
         # lib: Library = Library()
         # lib.add_book('Kafara', "who?", BookCategory.SCIENCE, datetime.strptime("2018/7/25", "%Y/%m/%d"))
         # lib.add_book('Yasser Kafka', "Yasser Murakami", BookCategory.FICTION, datetime.strptime("2017/7/5", "%Y"

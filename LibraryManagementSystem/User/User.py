@@ -20,7 +20,7 @@ class User:
     def onLogin(self):
         self._isLoggedIn = True
         print(f"Hello, {self.name}")
-        pass
+        return True
 
     def checkpasswd(self, passwd: bytes):
         return bcrypt.checkpw(passwd, self._passwd)

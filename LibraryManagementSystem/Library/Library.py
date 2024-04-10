@@ -1,12 +1,7 @@
-import os
 from datetime import datetime
 from LibraryManagementSystem.Library.Book import Book, BookCategory
 from typing import List, Union, Callable
 from enum import Enum
-
-
-def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 class SearchMode(Enum):

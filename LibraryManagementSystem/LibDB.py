@@ -21,6 +21,7 @@ class LibdB:
             if usr[0].checkpasswd(passwd):
                 return usr[0].onLogin()
         print("Username or Password is wrong")
+        return False
 
     def _getUser(self, userName: str):
         usr = [usr for usr in self._LIBRARIANS if userName == usr.userName]
