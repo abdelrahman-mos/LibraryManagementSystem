@@ -1,6 +1,5 @@
 import os
-from LibraryManagementSystem.Book import Book
-from LibraryManagementSystem.Book import BookCategory
+from LibraryManagementSystem.Book import Book, BookCategory
 from LibraryManagementSystem.Member import Member
 
 
@@ -23,8 +22,4 @@ class Library:
         lib.add_book('idek', "who?", BookCategory.SCIENCE)
         mem: Member = Member('Ahmed')
         mem2: Member = Member('Mohamed')
-        x = lib.books[0].borrowBook(mem)
-        x = lib.books[0].borrowBook(mem2)
-        x = lib.books[0].reserveBook(mem2)
-        lib.books[0].returnBook(mem)
-        print("x")
+        mem.borrowBook(lib.books[0])
