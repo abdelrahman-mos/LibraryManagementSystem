@@ -19,7 +19,6 @@ class User:
 
     def onLogin(self):
         self._isLoggedIn = True
-        print(f"Hello, {self.name}")
         return True
 
     def checkpasswd(self, passwd: bytes):

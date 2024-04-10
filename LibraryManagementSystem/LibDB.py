@@ -1,7 +1,14 @@
+from enum import Enum
 from typing import List, TYPE_CHECKING
 from LibraryManagementSystem.User.Librarian import Librarian
 from LibraryManagementSystem.User.Member import Member
 import bcrypt
+
+
+class Permissions(Enum):
+    LIBRARIAN = 1
+    MEMBER = 2
+    NO_PERMISSION = 3
 
 
 class LibdB:
@@ -16,15 +23,16 @@ class LibdB:
         self._MEMBERS.append(member)
 
     def checkCredentials(self, userName: str, passwd: bytes):
-        usr = self._getUser(userName)
-        if usr:
-            if usr[0].checkpasswd(passwd):
-                return usr[0].onLogin()
+        tmp = self._getUser(userName)
+        if tmp:
+            usr, permission = tmp[0]
+            if usr.checkpasswd(passwd):
+                return usr.onLogin(), usr, permission
         print("Username or Password is wrong")
-        return False
+        return False, None, Permissions.NO_PERMISSION
 
     def _getUser(self, userName: str):
-        usr = [usr for usr in self._LIBRARIANS if userName == usr.userName]
+        usr = [(usr, Permissions.LIBRARIAN) for usr in self._LIBRARIANS if userName == usr.userName]
         if not usr:
-            usr = [usr for usr in self._MEMBERS if userName == usr.userName]
+            usr = [(usr, Permissions.MEMBER) for usr in self._MEMBERS if userName == usr.userName]
         return usr

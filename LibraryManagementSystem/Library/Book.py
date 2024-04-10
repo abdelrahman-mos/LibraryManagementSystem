@@ -11,6 +11,7 @@ class BookCategory(Enum):
     SCIENCE = 1
     FICTION = 2
     LAW = 3
+    UNCATEGORIZED = 4
 
 
 class Book:

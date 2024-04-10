@@ -5,7 +5,7 @@ from LibraryManagementSystem.User.Member import Member
 from LibraryManagementSystem.Library.Book import BookCategory
 from datetime import datetime
 from typing import List, TYPE_CHECKING
-from LibraryManagementSystem.LibDB import LibdB
+from LibraryManagementSystem.LibDB import LibdB, Permissions
 
 if TYPE_CHECKING:
     from LibraryManagementSystem.User.Librarian import Librarian
@@ -18,21 +18,54 @@ def cls():
 class LibrarySystem:
     # This acts as the system
 
-    def _Login(self, dB: LibdB):
+    def __init__(self):
+        self.dB = None
+        self.lib = None
+
+    def _Login(self):
         usrName = input("Username: ")
         passwd = str.encode(input("password: "))
-        return dB.checkCredentials(usrName, passwd)
+        return self.dB.checkCredentials(usrName, passwd)
         # passwd = getpass("Password: ")
 
     def _hashPass(self, passwd: bytes):
         # used for hashing new passwords
         return bcrypt.hashpw(passwd, bcrypt.gensalt())
 
-    def run(self):
-        dB = LibdB()
+    def _librarian_interface(self, user: "Librarian"):
+        outText = f"""
+        Hello, {user.name}.
+        1) add book.
+        2) remove book.
+        3) edit book.
+        4) search book.
+        5) list all books.
+        6) add member.
+        7) remove member.
+        8) list all members.
+        q) quit.
+        """
         while True:
-            while not self._Login(dB):
-                pass
+            cls()
+            print(outText)
+            prompt = input("your input: ").strip().lower()
+            while prompt not in ['1', '2', '3', '4', '5', '6', '7', '8', 'q']:
+                print("Wrong input")
+                prompt = input("your input: ").strip().lower()
+            if prompt == '1':
+                user.addBook(self.lib)
+            elif prompt == 'q':
+                quit(0)
+
+    def run(self):
+        self.dB = LibdB()
+        self.lib = Library()
+        while True:
+            loggedIn, user, permission = self._Login()
+            while not loggedIn:
+                loggedIn, user, permission = self._Login()
+            if permission == Permissions.LIBRARIAN:
+                self._librarian_interface(user)
             if input("x to exit: ") == 'x':
                 break
         # lib: Library = Library()
