@@ -4,7 +4,7 @@ from typing import List, Tuple, TYPE_CHECKING
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from LibraryManagementSystem.Member import Member
+    from LibraryManagementSystem.User.Member import Member
 
 
 class BookCategory(Enum):

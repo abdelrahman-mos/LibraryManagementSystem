@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from LibraryManagementSystem.Book import Book, BookCategory
-from LibraryManagementSystem.Member import Member
+from LibraryManagementSystem.User.Member import Member
 from typing import List
 
 

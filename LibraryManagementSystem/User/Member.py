@@ -1,16 +1,18 @@
 import uuid
 from datetime import datetime
 from typing import List, Tuple, TYPE_CHECKING
+from LibraryManagementSystem.User.User import User
 
 if TYPE_CHECKING:
     from LibraryManagementSystem.Book import Book
 
 
-class Member:
+class Member(User):
+
+    _MAX_BORROW = 5
 
     def __init__(self, name: str):
-        self.name = name
-        self.id = uuid.uuid4()
+        super().__init__(name)
         self.borrowedBooks: List[Tuple["Book", datetime]] = []
         self.reservedBooks: List["Book"] = []
         self._canBorrow = True
@@ -21,13 +23,15 @@ class Member:
             if book.borrowBook(self):
                 date = datetime.now()
                 self.borrowedBooks.append((book, date))
-                if len(self.borrowedBooks) == 5:
+                if len(self.borrowedBooks) == self._MAX_BORROW:
                     self._canBorrow = False
             else:
                 # shouldn't be like this, will edit later
                 reply = input("Book is not available now, want to reserve it? (y/n)\n")
                 if reply.lower() == 'y':
                     return self.reserveBook(book)
+        else:
+            print("Sorry, you have exceeded your borrowing limit.")
 
     def reserveBook(self, book: "Book"):
         date = book.reserveBook(self)
