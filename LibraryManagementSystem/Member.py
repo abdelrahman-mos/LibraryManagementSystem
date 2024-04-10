@@ -12,7 +12,7 @@ class Member:
         self.name = name
         self.id = uuid.uuid4()
         self.borrowedBooks: List[Tuple["Book", datetime]] = []
-        self.reservedBooks: List = []
+        self.reservedBooks: List["Book"] = []
         self._canBorrow = True
 
     def borrowBook(self, book: "Book"):
@@ -32,3 +32,4 @@ class Member:
     def reserveBook(self, book: "Book"):
         date = book.reserveBook(self)
         print(f"Book reserved on date {date.strftime("%d/%m/%Y, %H:%M:%S")}")
+        self.reservedBooks.append(book)

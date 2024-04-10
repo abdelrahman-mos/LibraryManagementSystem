@@ -14,13 +14,14 @@ class BookCategory(Enum):
 
 
 class Book:
-    def __init__(self, name: str, author: str, category: BookCategory, num: int = 1):
+    def __init__(self, name: str, author: str, category: BookCategory, publicationDate: datetime, num: int = 1):
 
         # Public attributes
         self.id = uuid.uuid4()
         self.name = name
         self.author = author
         self.category = category
+        self.publicationDate = publicationDate
 
         # Private attributes
         self._num = num
@@ -45,6 +46,9 @@ class Book:
         if returnedBy in self._borrowedBy:
             self._borrowedBy.remove(returnedBy)
             self._numAvailable += 1
+
+    # def __lt__(self, other):
+    #     return self.name < other.name
 
     # def __str__(self):
     #     tmp = f"book name: {self.name}\nauthor: {self.author}\ncategory: {self.category}\nID: {self.id}\n"
