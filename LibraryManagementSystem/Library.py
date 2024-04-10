@@ -3,6 +3,7 @@ from datetime import datetime
 from LibraryManagementSystem.Book import Book, BookCategory
 from LibraryManagementSystem.User.Member import Member
 from typing import List
+from enum import Enum
 
 
 def cls():
@@ -10,11 +11,18 @@ def cls():
 
 
 class Library:
+    class SearchMode(Enum):
+        # search mode to get rid of code redundancy. Might need to be general for main search function.
+        TITLE = 1
+        AUTHOR = 2
+        CATEGORY = 3
+        PUBLICATION_DATE = 4
+
     def __init__(self):
         self.books: List[Book] = []
 
     def add_book(self, bookName: str, author: str, category: BookCategory, publicationDate: datetime, num: int = 1):
-        book: Book = Book(name=bookName, author=author, category=category, publicationDate=publicationDate, num=num)
+        book: Book = Book(title=bookName, author=author, category=category, publicationDate=publicationDate, num=num)
         # print(book)
         self.books.append(book)
 
@@ -27,23 +35,24 @@ class Library:
     #     out = startWith + [book for book in includes if book not in startWith]
     #     return out
 
-    def search_by_name(self, bookName: str) -> List[Book]:
-        books = [book for book in self.books if bookName in book.name]
-        booksStartWith = [book for book in books if book.name.startswith(bookName)]
+    def search(self, bookName: str, mode: SearchMode = SearchMode.TITLE) -> List[Book]:
+        books = [book for book in self.books if bookName in book.title]
+        booksStartWith = [book for book in books if book.title.startswith(bookName)]
         out = (sorted(booksStartWith, key=lambda x: x.name) +
                sorted([book for book in books if book not in booksStartWith],
                       key=lambda x: x.name))
 
         return out
 
-    def search_by_author(self, authorName: str) -> List[Book]:
-        pass
-
-    def search_by_category(self, category: BookCategory) -> List[Book]:
-        pass
-
-    def search_by_publication_date(self, publicationDate: datetime) -> List[Book]:
-        pass
+    # This will cause redundant code, need to be refactored
+    # def search_by_author(self, authorName: str) -> List[Book]:
+    #     pass
+    #
+    # def search_by_category(self, category: BookCategory) -> List[Book]:
+    #     pass
+    #
+    # def search_by_publication_date(self, publicationDate: datetime) -> List[Book]:
+    #     pass
 
     @staticmethod
     def run():
@@ -60,5 +69,5 @@ class Library:
         mem2: Member = Member('Mohamed')
         mem.borrowBook(lib.books[0])
         mem2.borrowBook(lib.books[0])
-        lib.search_by_name('Ka')
-        lib.search_by_name('Kafk')
+        lib.search('Ka')
+        lib.search('Kafk')

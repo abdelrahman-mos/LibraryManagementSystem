@@ -14,11 +14,11 @@ class BookCategory(Enum):
 
 
 class Book:
-    def __init__(self, name: str, author: str, category: BookCategory, publicationDate: datetime, num: int = 1):
+    def __init__(self, title: str, author: str, category: BookCategory, publicationDate: datetime, num: int = 1):
 
         # Public attributes
         self.id = uuid.uuid4()
-        self.name = name
+        self.title = title
         self.author = author
         self.category = category
         self.publicationDate = publicationDate
