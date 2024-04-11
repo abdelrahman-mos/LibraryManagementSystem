@@ -54,6 +54,12 @@ class LibrarySystem:
                 prompt = input("your input: ").strip().lower()
             if prompt == '1':
                 user.addBook(self.lib)
+            elif prompt == '2':
+                user.removeBook(self.lib)
+            elif prompt == '3':
+                user.editBook(self.lib)
+            elif prompt == '5':
+                self.lib.list_books()
             elif prompt == 'q':
                 quit(0)
 

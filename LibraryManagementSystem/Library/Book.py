@@ -14,6 +14,14 @@ class BookCategory(Enum):
     UNCATEGORIZED = 4
 
 
+catMap = {
+    BookCategory.SCIENCE: "Science",
+    BookCategory.FICTION: "Fiction",
+    BookCategory.LAW: "Law",
+    BookCategory.UNCATEGORIZED: "Uncategorized"
+}
+
+
 class Book:
     def __init__(self, title: str, author: str, category: BookCategory, publicationDate: datetime, num: int = 1):
 
@@ -23,9 +31,9 @@ class Book:
         self.author = author
         self.category = category
         self.publicationDate = publicationDate
+        self.num = num
 
         # Private attributes
-        self._num = num
         self._numAvailable = num
         self._borrowedBy: List["Member"] = []
         self._reservedBy: List[Tuple["Member", datetime]] = []

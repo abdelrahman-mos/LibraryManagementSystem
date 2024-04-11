@@ -1,7 +1,9 @@
+import uuid
 from datetime import datetime
-from LibraryManagementSystem.Library.Book import Book, BookCategory
+from LibraryManagementSystem.Library.Book import Book, BookCategory, catMap
 from typing import List, Union, Callable
 from enum import Enum
+import sys
 
 
 class SearchMode(Enum):
@@ -21,6 +23,27 @@ class Library:
         book: Book = Book(title=bookName, author=author, category=category, publicationDate=publicationDate, num=num)
         # print(book)
         self.books.append(book)
+
+    def list_books(self):
+        i = 1
+        for book in self.books:
+            textOut = (f'{i}) Title: {book.title}, Author: {book.author}, Category: {catMap[book.category]}, '
+                       f'Publication Date: {book.publicationDate.strftime("%d/%m/%Y")}, Copies: {book
+                       .num}, ID: {book.id}')
+            print(textOut)
+            i += 1
+        print("press enter to continue: ")
+        sys.stdin.read(1)
+
+    def remove_book(self, bookID: uuid.UUID):
+        book_to_remove = [book for book in self.books if bookID == book.id][0]
+        self.books.remove(book_to_remove)
+        print("Removed book successfully")
+        print("press enter to continue: ")
+        sys.stdin.read(1)
+
+    def edit_book(self, bookID: uuid.UUID):
+        pass
 
     # def search_by_name(self, bookName: str) -> List[str]:
     #     # get a list with book names
