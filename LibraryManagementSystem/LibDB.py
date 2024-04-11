@@ -39,3 +39,7 @@ class LibdB:
         if not usr:
             usr = [(usr, Permissions.MEMBER) for usr in self._MEMBERS if userName == usr.userName]
         return usr
+
+    def getUserNames(self):
+        usernames = [user.userName for user in self._MEMBERS]
+        return usernames

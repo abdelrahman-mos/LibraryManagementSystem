@@ -1,10 +1,12 @@
 import sys
-import uuid
+import uuid, bcrypt
 from datetime import datetime
 from typing import List, Tuple, TYPE_CHECKING
 from LibraryManagementSystem.User.User import User
 from LibraryManagementSystem.Library.Library import Library
 from LibraryManagementSystem.Library.Book import Book
+from LibraryManagementSystem.LibDB import LibdB
+from LibraryManagementSystem.User.Member import Member
 
 
 class Librarian(User):
@@ -135,8 +137,15 @@ class Librarian(User):
     def reserveBook(self, book: "Book"):
         pass
 
-    def addMemberAccount(self):
-        pass
+    def addMemberAccount(self, dB: LibdB):
+        memName = input("Name: ")
+        usernames = dB.getUserNames()
+        userName = input("Username: ")
+        while userName in usernames:
+            print("Username is not available.")
+            userName = input("Username: ")
+        passwd = bcrypt.hashpw(str.encode(input("Password: ")), bcrypt.gensalt())
+        dB.addMember(Member(memName, userName, passwd))
 
     def removeMemberAccount(self):
         pass
