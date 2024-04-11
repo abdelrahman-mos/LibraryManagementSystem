@@ -28,8 +28,7 @@ class Library:
         i = 1
         for book in self.books:
             textOut = (f'{i}) Title: {book.title}, Author: {book.author}, Category: {catMap[book.category]}, '
-                       f'Publication Date: {book.publicationDate.strftime("%d/%m/%Y")}, Copies: {book
-                       .num}, ID: {book.id}')
+                       f'Publication Date: {book.publicationDate.strftime("%d/%m/%Y")}, Copies: {book.num}, ID: {book.id}')
             print(textOut)
             i += 1
         print("press enter to continue: ")
