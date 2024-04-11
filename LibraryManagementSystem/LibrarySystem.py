@@ -52,14 +52,38 @@ class LibrarySystem:
             while prompt not in ['1', '2', '3', '4', '5', '6', '7', '8', 'q']:
                 print("Wrong input")
                 prompt = input("your input: ").strip().lower()
+
+            if prompt == 'q':
+                quit(0)
+
+            # prompt_map = {
+            #     '1': user.addBook,
+            #     '2': user.removeBook,
+            #     '3': user.editBook,
+            #     '4': user.searchBook,
+            #     '5': self.lib.list_books,
+            #     '6': user.addMemberAccount,
+            #     '7': user.removeMemberAccount,
+            #     '8': self.dB.listMembers,
+            # }
+
+            # prompt_map[prompt]()
             if prompt == '1':
                 user.addBook(self.lib)
             elif prompt == '2':
                 user.removeBook(self.lib)
             elif prompt == '3':
                 user.editBook(self.lib)
+            elif prompt == '4':
+                user.searchBook(self.lib)
             elif prompt == '5':
                 self.lib.list_books()
+            elif prompt == '6':
+                user.addMemberAccount()
+            elif prompt == '7':
+                user.removeMemberAccount()
+            elif prompt == '8':
+                self.dB.listMembers()
             elif prompt == 'q':
                 quit(0)
 

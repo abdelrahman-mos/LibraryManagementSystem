@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import List, Tuple, TYPE_CHECKING
 from LibraryManagementSystem.User.User import User
 from LibraryManagementSystem.Library.Library import Library
-from LibraryManagementSystem.Library.Book import BookCategory
 from LibraryManagementSystem.Library.Book import Book
 
 
@@ -16,29 +15,23 @@ class Librarian(User):
         # self.reservedBooks: List["Book"] = []
         # self._canBorrow = True
 
-    def _getBookCat(self):
-        textOut = """Book Category
-                1) Science.
-                2) Fiction.
-                3) Law
-                4) Uncategorized
-                """
-        print(textOut)
-        cat = input("Book Category: ").strip().lower()
-        while cat not in ['1', '2', '3']:
-            print("Wrong Category")
-            cat = input("Book Category: ").strip().lower()
+    def _getDate(self):
+        pubDate = input("Publication Date (dd/mm/yyyy): ")
+        try:
+            publicationDate = datetime.strptime(pubDate, "%d/%m/%Y")
+            return publicationDate
+        except ValueError:
+            print("Please enter a valid publication date")
+            return False
 
-        if cat == '1':
-            bookCat = BookCategory.SCIENCE
-        elif cat == '2':
-            bookCat = BookCategory.FICTION
-        elif cat == '3':
-            bookCat = BookCategory.LAW
-        else:
-            bookCat = BookCategory.UNCATEGORIZED
-
-        return bookCat
+    def _getNumCopies(self):
+        numCopies = input("number of copies added: ")
+        try:
+            numCopies = int(numCopies)
+            return numCopies
+        except ValueError:
+            print("Please enter a valid number of copies")
+            return False
 
     def addBook(self, lib: Library):
         bookName = input("Book Title: ")
@@ -46,17 +39,31 @@ class Librarian(User):
 
         bookCat = self._getBookCat()
 
-        pubDate = input("Publication Date (dd/mm/yyyy): ")
-        publicationDate = datetime.strptime(pubDate, "%d/%m/%Y")
+        # pubDate = input("Publication Date (dd/mm/yyyy): ")
+        # try:
+        #     publicationDate = datetime.strptime(pubDate, "%d/%m/%Y")
+        # except ValueError:
+        #     print("Please put a valid publication date")
+        publicationDate = False
+        while not publicationDate:
+            publicationDate = self._getDate()
 
-        numCopies = int(input("number of copies added: "))
+        numCopies = False
+        while not numCopies:
+            numCopies = self._getNumCopies()
 
         lib.add_book(bookName=bookName, author=author, category=bookCat, publicationDate=publicationDate, num=numCopies)
 
     def removeBook(self, lib: Library):
         bookID = input('Enter book ID to remove: ')
-        bookID = uuid.UUID(bookID)
-        lib.remove_book(bookID)
+        try:
+            bookID = uuid.UUID(bookID)
+            lib.remove_book(bookID)
+            print("Book removed successfully")
+        except ValueError:
+            print("Book ID is incorrect")
+            return
+
 
     def editBook(self, lib: Library):
         bookID = input('Enter book ID to edit: ')

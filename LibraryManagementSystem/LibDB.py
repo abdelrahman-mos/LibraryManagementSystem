@@ -31,6 +31,9 @@ class LibdB:
         print("Username or Password is wrong")
         return False, None, Permissions.NO_PERMISSION
 
+    def listMembers(self):
+        pass
+
     def _getUser(self, userName: str):
         usr = [(usr, Permissions.LIBRARIAN) for usr in self._LIBRARIANS if userName == usr.userName]
         if not usr:
