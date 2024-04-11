@@ -81,7 +81,7 @@ class LibrarySystem:
             elif prompt == '6':
                 user.addMemberAccount(self.dB)
             elif prompt == '7':
-                user.removeMemberAccount()
+                user.removeMemberAccount(self.dB)
             elif prompt == '8':
                 self.dB.listMembers()
             elif prompt == 'q':

@@ -5,8 +5,10 @@ from typing import List, Tuple, TYPE_CHECKING
 from LibraryManagementSystem.User.User import User
 from LibraryManagementSystem.Library.Library import Library
 from LibraryManagementSystem.Library.Book import Book
-from LibraryManagementSystem.LibDB import LibdB
 from LibraryManagementSystem.User.Member import Member
+
+if TYPE_CHECKING:
+    from LibraryManagementSystem.LibDB import LibdB
 
 
 class Librarian(User):
@@ -66,11 +68,15 @@ class Librarian(User):
             print("Book ID is incorrect")
             return
 
-
     def editBook(self, lib: Library):
         bookID = input('Enter book ID to edit: ')
-        bookID = uuid.UUID(bookID)
-        bookToEdit = [book for book in lib.books if bookID == book.id][0]
+        try:
+            bookID = uuid.UUID(bookID)
+            bookToEdit = [book for book in lib.books if bookID == book.id][0]
+        except ValueError:
+            print("Book ID is incorrect")
+            return
+
         if not bookToEdit:
             print("Book ID is incorrect")
             return
@@ -137,7 +143,7 @@ class Librarian(User):
     def reserveBook(self, book: "Book"):
         pass
 
-    def addMemberAccount(self, dB: LibdB):
+    def addMemberAccount(self, dB: "LibdB"):
         memName = input("Name: ")
         usernames = dB.getUserNames()
         userName = input("Username: ")
@@ -147,5 +153,15 @@ class Librarian(User):
         passwd = bcrypt.hashpw(str.encode(input("Password: ")), bcrypt.gensalt())
         dB.addMember(Member(memName, userName, passwd))
 
-    def removeMemberAccount(self):
-        pass
+    def removeMemberAccount(self, dB: "LibdB"):
+        memID = input("Enter member ID to remove: ")
+        try:
+            memID = uuid.UUID(memID)
+            dB.removeMember(memID)
+            print("member removed successfully")
+            print("press enter to continue: ")
+            sys.stdin.read(1)
+        except ValueError:
+            print("member ID is incorrect")
+            return
+

@@ -1,8 +1,9 @@
+import uuid
 from enum import Enum
 from typing import List, TYPE_CHECKING
 from LibraryManagementSystem.User.Librarian import Librarian
 from LibraryManagementSystem.User.Member import Member
-import bcrypt
+import bcrypt, sys
 
 
 class Permissions(Enum):
@@ -22,6 +23,10 @@ class LibdB:
         # should be triggered from a Librarian class
         self._MEMBERS.append(member)
 
+    def removeMember(self, memberID: uuid.UUID):
+        member_to_remove = [member for member in self._MEMBERS if memberID == member.id][0]
+        self._MEMBERS.remove(member_to_remove)
+
     def checkCredentials(self, userName: str, passwd: bytes):
         tmp = self._getUser(userName)
         if tmp:
@@ -32,7 +37,14 @@ class LibdB:
         return False, None, Permissions.NO_PERMISSION
 
     def listMembers(self):
-        pass
+        i = 1
+        for member in self._MEMBERS:
+            textOut = (f'{i}) Name: {member.name}, ID: {member.id}, Username: {member.userName}, Borrowed books: {member
+                       .borrowedBooks}, Reserved books: {member.reservedBooks}')
+            print(textOut)
+            i += 1
+        print("press enter to continue: ")
+        sys.stdin.read(1)
 
     def _getUser(self, userName: str):
         usr = [(usr, Permissions.LIBRARIAN) for usr in self._LIBRARIANS if userName == usr.userName]
@@ -43,3 +55,6 @@ class LibdB:
     def getUserNames(self):
         usernames = [user.userName for user in self._MEMBERS]
         return usernames
+
+    def fetchMembers(self):
+        return self._MEMBERS
