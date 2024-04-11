@@ -1,9 +1,12 @@
 import uuid
 from enum import Enum
-from typing import List, TYPE_CHECKING
+from typing import List
+
+import bcrypt
+import sys
+
 from LibraryManagementSystem.User.Librarian import Librarian
 from LibraryManagementSystem.User.Member import Member
-import bcrypt, sys
 
 
 class Permissions(Enum):
@@ -17,7 +20,9 @@ class LibdB:
     # we will add a default Librarian
     _LIBRARIANS: List["Librarian"] = [Librarian(name='Abdelrahman', userName='abdelrahman_mos',
                                                 passwd=bcrypt.hashpw(b'123456', bcrypt.gensalt()))]
-    _MEMBERS: List["Member"] = []
+    # we will also add a default member for faster testing
+    _MEMBERS: List["Member"] = [Member(name='ahmed', userName='ahmed',
+                                       passwd=bcrypt.hashpw(b'123456', bcrypt.gensalt()))]
 
     def addMember(self, member: "Member"):
         # should be triggered from a Librarian class

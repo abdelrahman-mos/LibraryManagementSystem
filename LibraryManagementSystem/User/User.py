@@ -45,17 +45,35 @@ class User:
 
         return bookCat
 
+    def _getBookByID(self, lib: "Library"):
+        bookID = input('Enter book ID to checkout: ')
+        try:
+            bookID = uuid.UUID(bookID)
+            bookToReturn = [book for book in lib.books if bookID == book.id][0]
+        except ValueError:
+            print("Book ID is incorrect")
+            return None
+
+        if not bookToReturn:
+            print("Book ID is incorrect")
+            return None
+        return bookToReturn
+
     def onLogin(self):
         self._isLoggedIn = True
+        return True
+
+    def onLogout(self):
+        self._isLoggedIn = False
         return True
 
     def checkpasswd(self, passwd: bytes):
         return bcrypt.checkpw(passwd, self._passwd)
 
-    def borrowBook(self, book: "Book"):
+    def borrowBook(self, lib: "Library"):
         pass
 
-    def reserveBook(self, book: "Book"):
+    def reserveBook(self, lib: "Library"):
         pass
 
     def _listBooks(self, books: List["Book"]):

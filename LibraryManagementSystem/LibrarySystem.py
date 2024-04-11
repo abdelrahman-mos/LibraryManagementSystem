@@ -35,21 +35,22 @@ class LibrarySystem:
     def _librarian_interface(self, user: "Librarian"):
         outText = f"""
         Hello, {user.name}.
-        1) add book.
-        2) remove book.
-        3) edit book.
-        4) search book.
-        5) list all books.
-        6) add member.
-        7) remove member.
-        8) list all members.
+        1) Add book.
+        2) Remove book.
+        3) Edit book.
+        4) Search book.
+        5) List all books.
+        6) Add member.
+        7) Remove member.
+        8) List all members.
+        9) Logout.
         q) quit.
         """
         while True:
             cls()
             print(outText)
             prompt = input("your input: ").strip().lower()
-            while prompt not in ['1', '2', '3', '4', '5', '6', '7', '8', 'q']:
+            while prompt not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'q']:
                 print("Wrong input")
                 prompt = input("your input: ").strip().lower()
 
@@ -84,8 +85,54 @@ class LibrarySystem:
                 user.removeMemberAccount(self.dB)
             elif prompt == '8':
                 self.dB.listMembers()
-            elif prompt == 'q':
+            elif prompt == '9':
+                user.onLogout()
+                return
+
+    def _member_interface(self, user: "Member"):
+        outText = f"""
+                Hello, {user.name}.
+                1) Checkout book.
+                2) Reserve book.
+                3) Return book.
+                4) Renew book.
+                5) Search book.
+                6) List all books.
+                7) List borrowed books.
+                8) List reserved books.
+                9) Logout.
+                q) quit.
+                """
+        while True:
+            cls()
+            print(outText)
+            prompt = input("your input: ").strip().lower()
+            while prompt not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'q']:
+                print("Wrong input")
+                prompt = input("your input: ").strip().lower()
+
+            if prompt == 'q':
                 quit(0)
+
+            if prompt == '1':
+                user.borrowBook(self.lib)
+            elif prompt == '2':
+                user.reserveBook(self.lib)
+            elif prompt == '3':
+                user.returnBook(self.lib)
+            elif prompt == '4':
+                user.renewBook()
+            elif prompt == '5':
+                user.searchBook(self.lib)
+            elif prompt == '6':
+                self.lib.list_books()
+            elif prompt == '7':
+                user.listBorrowed()
+            elif prompt == '8':
+                user.listReserved()
+            elif prompt == '9':
+                user.onLogout()
+                return
 
     def run(self):
         self.dB = LibdB()
@@ -96,8 +143,10 @@ class LibrarySystem:
                 loggedIn, user, permission = self._Login()
             if permission == Permissions.LIBRARIAN:
                 self._librarian_interface(user)
-            if input("x to exit: ") == 'x':
-                break
+            elif permission == Permissions.MEMBER:
+                self._member_interface(user)
+            # if input("x to exit: ") == 'x':
+            #     break
         # lib: Library = Library()
         # lib.add_book('Kafara', "who?", BookCategory.SCIENCE, datetime.strptime("2018/7/25", "%Y/%m/%d"))
         # lib.add_book('Yasser Kafka', "Yasser Murakami", BookCategory.FICTION, datetime.strptime("2017/7/5", "%Y"

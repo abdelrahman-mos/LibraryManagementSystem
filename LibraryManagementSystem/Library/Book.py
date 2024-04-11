@@ -1,10 +1,11 @@
 import uuid
 from enum import Enum
-from typing import List, Tuple, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING, Union
 from datetime import datetime
 
 if TYPE_CHECKING:
     from LibraryManagementSystem.User.Member import Member
+    from LibraryManagementSystem.User.User import User
 
 
 class BookCategory(Enum):
@@ -35,15 +36,16 @@ class Book:
 
         # Private attributes
         self._numAvailable = num
-        self._borrowedBy: List["Member"] = []
+        self._borrowedBy: List[Tuple["Member", datetime]] = []
         self._reservedBy: List[Tuple["Member", datetime]] = []
 
-    def borrowBook(self, borrowBy: "Member"):
+    def borrowBook(self, borrowBy: Union["Member", "User"]):
         if self._numAvailable > 0:
             self._numAvailable -= 1
-            self._borrowedBy.append(borrowBy)
-            return True
-        return False
+            date = datetime.now()
+            self._borrowedBy.append((borrowBy, datetime.now()))
+            return True, date
+        return False, None
 
     def reserveBook(self, reserveBy: "Member"):
         date = datetime.now()
